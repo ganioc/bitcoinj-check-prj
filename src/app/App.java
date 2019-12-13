@@ -8,7 +8,13 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONObject;
+
 import lib.Boy;
+import lib.rfc.client.IfArgs;
+import lib.rfc.client.IfFeedback;
+import lib.rfc.client.IfSysinfo;
+import lib.rfc.client.RPCClient;
 
 public class App {
     public static void fetchFromBaidu() {
@@ -91,6 +97,37 @@ public class App {
         // App.fetchFromBaidu();
 
         MySign.run();
+        MySign.genKey();
+        MySign.testBitcoinj();
+        MySign.testBitcoinj2();
+
+        System.out.println("Create client");
+
+        IfSysinfo info = new IfSysinfo();
+        info.secret = "6f1df947d7942faf4110595f3aad1f2670e11b81ac9c1d8ee98806d81ec5f591";
+        info.address = "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r";
+        info.host = "161.189.65.155";
+        info.port = 18089;
+
+        RPCClient client = new RPCClient("161.189.65.155", 18089, info);
+
+        String funcN = "view";
+        IfArgs funcArg = new IfArgs();
+
+        funcArg.method = "getBalance";
+
+        funcArg.params = new JSONObject();
+        funcArg.params.put("address", "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r");
+
+        System.out.println(funcN);
+        System.out.println(funcArg);
+
+        IfFeedback fb = client.callAsync(funcN, funcArg.toJSON());
+
+        System.out.println("\nFeedback :");
+        System.out.println(fb);
+        System.out.println(fb.ret);
+        System.out.println(fb.resp);
 
     }
 }
