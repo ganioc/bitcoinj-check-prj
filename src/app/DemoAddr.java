@@ -10,8 +10,13 @@ import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
 import java.security.spec.ECGenParameterSpec;
 
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.params.MainNetParams;
 
+import java.security.SecureRandom;
 // import System.out.println;
 
 public class DemoAddr {
@@ -21,39 +26,91 @@ public class DemoAddr {
 
     }
 
-    public static String createKey() throws NoSuchAlgorithmException, InvalidAlgorithmParameterException {
+    /**
+     * address from secret key ,
+     * 
+     * @param secret 32 bytes hex format
+     */
+    public static String addressFromSecretKey(String secret) {
+
+        BigInteger priv = new BigInteger(secret, 16);
+
+        ECKey key = ECKey.fromPrivate(priv);
+        NetworkParameters params = new MainNetParams();
+        Address addr = key.toAddress(params);
+
+        // System.out.println("addr:");
+        // System.out.println(addr);
+
+        return addr + "";
+    }
+
+    /**
+     * get public address from secret key
+     * 
+     * @param secret hex string format of secret
+     * 
+     * @return hex string format of public key
+     */
+    public static String publicKeyFromSecretKey(String secret) {
+
+        BigInteger priv = new BigInteger(secret, 16);
+
+        ECKey key = ECKey.fromPrivate(priv);
+
+        // System.out.println(key);
+
+        String pub = key.getPublicKeyAsHex();
+
+        // System.out.println("pub key:" + "");
+        // System.out.println(pub);
+
+        return pub;
+    }
+
+    public static String createKey() {
+
         try {
-            KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("EC");
-            ECGenParameterSpec ecGenParameterSpec = new ECGenParameterSpec("secp256k1");
-            keyPairGenerator.initialize(ecGenParameterSpec);
+            SecureRandom secureRandom = SecureRandom.getInstanceStrong();
+            ECKey key = new ECKey(secureRandom);
 
-            // generate public key, private key
-            KeyPair kp = keyPairGenerator.generateKeyPair();
-            PublicKey pub = kp.getPublic();
-            PrivateKey pvt = kp.getPrivate();
+            BigInteger pvt = key.getPrivKey();
 
-            ECPrivateKey epvt = (ECPrivateKey) pvt;
-            // String sepvt = adjustTo64(epvt.getS().toString(16)).toUpperCase();
-            System.out.println("s[" + "]:" + epvt.getS());
-            System.out.println(epvt.getS().toString(16));
+            String strKey = adjustTo64(pvt.toString(16));
 
-            return epvt.getS().toString(16);
+            return strKey;
 
         } catch (NoSuchAlgorithmException e) {
-            System.err.println(e);
-            return null;
-
-        } catch (InvalidAlgorithmParameterException e) {
-            System.err.println(e);
+            System.err.println("createKey():" + e);
             return null;
         }
     }
 
-    public static String addressFromSecretKey(String secret) {
+    static private String adjustTo64(final String s) {
+        switch (s.length()) {
+        case 62:
+            return "00" + s;
+        case 63:
+            return "0" + s;
+        case 64:
+            return s;
+        default:
+            throw new IllegalArgumentException("not a valid key: " + s);
+        }
+    }
 
-        BigInteger priv = new BigInteger(secret, 16);
-        byte[] bytesPub = ECKey.publicKeyFromPrivate(priv, true);
+    public static boolean isValidAddress(final String str) {
+        NetworkParameters params = new MainNetParams();
 
-        return null;
+        try {
+            Address addr = Address.fromBase58(params, str);
+            System.out.println("addr:");
+            System.out.println(addr);
+        } catch (AddressFormatException e) {
+            System.err.println("Wrong addr");
+            return false;
+        }
+
+        return true;
     }
 }

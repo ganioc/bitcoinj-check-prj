@@ -8,7 +8,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
 import java.security.spec.ECGenParameterSpec;
+import java.security.spec.ECPoint;
 
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.DumpedPrivateKey;
@@ -94,16 +96,17 @@ public class MySign {
             final PublicKey pub = kp.getPublic();
             final PrivateKey pvt = kp.getPrivate();
 
-            // ECPrivateKey epvt = (ECPrivateKey) pvt;
-            // String sepvt = adjustTo64(epvt.getS().toString(16)).toUpperCase();
-            // System.out.println("secret [" + sepvt.length() + "]: " + sepvt);
+            ECPrivateKey epvt = (ECPrivateKey) pvt;
+            String sepvt = adjustTo64(epvt.getS().toString(16)).toUpperCase();
+            System.out.println("secret [" + sepvt.length() + "]: " + sepvt);
 
-            // ECPublicKey epub = (ECPublicKey) pub;
-            // ECPoint pt = epub.getW();
-            // String sx = adjustTo64(pt.getAffineX().toString(16)).toUpperCase();
-            // String sy = adjustTo64(pt.getAffineY().toString(16)).toUpperCase();
-            // String bcPub = "04" + sx + sy;
-            // System.out.println("bcPub: " + bcPub);
+            ECPublicKey epub = (ECPublicKey) pub;
+            ECPoint pt = epub.getW();
+            String sx = adjustTo64(pt.getAffineX().toString(16)).toUpperCase();
+            String sy = adjustTo64(pt.getAffineY().toString(16)).toUpperCase();
+            String bcPub = "04" + sx + sy;
+            System.out.println("bcPub: " + bcPub);
+            System.out.println("another pub " + "03" + sx);
 
         } catch (final NoSuchAlgorithmException e) {
 

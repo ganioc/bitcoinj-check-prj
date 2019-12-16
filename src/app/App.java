@@ -137,7 +137,27 @@ public class App {
         System.out.println("Secret:");
         System.out.println(secret);
 
-        String pubkey = DemoAddr.addressFromSecretKey(secret);
+        System.out.println("public key:");
+        System.out.println(DemoAddr.publicKeyFromSecretKey(secret));
 
+        System.out.println("address:");
+        System.out.println(DemoAddr.addressFromSecretKey(secret));
+
+        System.out.println("\nDo some test");
+        String priv = "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
+
+        System.out.println(DemoAddr.addressFromSecretKey(priv));
+
+        System.out.println(DemoAddr.publicKeyFromSecretKey(priv));
+
+        System.out.println("\ncreateKey()");
+        String newSecret;
+        System.out.println(newSecret = DemoAddr.createKey());
+        System.out.println(DemoAddr.addressFromSecretKey(newSecret));
+
+        System.out.println(DemoAddr.publicKeyFromSecretKey(newSecret));
+
+        DemoAddr.isValidAddress("1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy");
+        DemoAddr.isValidAddress("1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy");
     }
 }
