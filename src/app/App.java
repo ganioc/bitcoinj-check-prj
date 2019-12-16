@@ -1,16 +1,13 @@
 package app;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.json.JSONObject;
 
-import lib.Boy;
 import lib.rfc.client.IfArgs;
 import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
@@ -80,14 +77,14 @@ public class App {
             System.out.println(a[i]);
         }
 
-        Boy aBoy = new Boy("John");
-        aBoy.shout();
-        String argsext[] = { new String("ain"), new String("bin") };
-        aBoy.getvalue(10, 11);
-        Boy.main(argsext);
-        aBoy.shout();
+        // Boy aBoy = new Boy("John");
+        // aBoy.shout();
+        // String argsext[] = { new String("ain"), new String("bin") };
+        // aBoy.getvalue(10, 11);
+        // Boy.main(argsext);
+        // aBoy.shout();
 
-        aBoy.use();
+        // aBoy.use();
 
         System.out.println("");
 
@@ -128,6 +125,19 @@ public class App {
         System.out.println(fb);
         System.out.println(fb.ret);
         System.out.println(fb.resp);
+
+        DemoAddr.main();
+
+        String secret = DemoAddr.createKey();
+        if (secret == null) {
+            System.err.println("create secret failed");
+            System.exit(-1);
+        }
+        System.out.println("=========================");
+        System.out.println("Secret:");
+        System.out.println(secret);
+
+        String pubkey = DemoAddr.addressFromSecretKey(secret);
 
     }
 }
