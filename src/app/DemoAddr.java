@@ -1,20 +1,13 @@
 package app;
 
 import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.ECPrivateKey;
-import java.security.spec.ECGenParameterSpec;
 
-import org.bitcoinj.core.Address;
-import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
+import org.bitcoinj.core.Address;
+import org.bitcoinj.core.AddressFormatException;
 
 import java.security.SecureRandom;
 // import System.out.println;
@@ -39,9 +32,6 @@ public class DemoAddr {
         NetworkParameters params = new MainNetParams();
         Address addr = key.toAddress(params);
 
-        // System.out.println("addr:");
-        // System.out.println(addr);
-
         return addr + "";
     }
 
@@ -58,12 +48,7 @@ public class DemoAddr {
 
         ECKey key = ECKey.fromPrivate(priv);
 
-        // System.out.println(key);
-
         String pub = key.getPublicKeyAsHex();
-
-        // System.out.println("pub key:" + "");
-        // System.out.println(pub);
 
         return pub;
     }
@@ -99,13 +84,15 @@ public class DemoAddr {
         }
     }
 
+    /**
+     * check address valid or not
+     */
     public static boolean isValidAddress(final String str) {
         NetworkParameters params = new MainNetParams();
 
         try {
             Address addr = Address.fromBase58(params, str);
-            System.out.println("addr:");
-            System.out.println(addr);
+  
         } catch (AddressFormatException e) {
             System.err.println("Wrong addr");
             return false;

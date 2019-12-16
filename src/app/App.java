@@ -157,7 +157,26 @@ public class App {
 
         System.out.println(DemoAddr.publicKeyFromSecretKey(newSecret));
 
-        DemoAddr.isValidAddress("1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy");
-        DemoAddr.isValidAddress("1J7mdg5rbQyUHENYdx39WVWK7fsLpEoXZy");
+        String[] addresses = { "1FbwA2egJnzUqifZWFggrHcDHE1mv1XEwx", "18bea6HE35DfsLy3JrGDdhgt2Lgpj6cnVk",
+                "15nnW962zo4BSdaoc95humWZ1efvMGjPiH", "1FbwA2egJnzUqifZWFggrHcDHE1mv1XEwx" };
+
+        for (int i = 0; i < addresses.length; i++) {
+            System.out.print(i);
+            System.out.print('-');
+            System.out.println(DemoAddr.isValidAddress(addresses[i]));
+        }
+
+        for (int i = 0; i < 5; i++) {
+
+            System.out.println(i);
+            String sec = DemoAddr.createKey();
+            System.out.println(sec);
+
+            System.out.println("public key:");
+            System.out.println(DemoAddr.publicKeyFromSecretKey(sec));
+            System.out.println(DemoAddr.addressFromSecretKey(sec));
+        }
+
+        System.out.println(DemoAddr.isValidAddress("15nnW962zo4BSdaoc95humWZ1efvMGjPiH"));
     }
 }
