@@ -12,6 +12,7 @@ import lib.rfc.client.IfArgs;
 import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
 import lib.rfc.client.RPCClient;
+import lib.rfc.DemoAddr;
 
 public class App {
     public static void fetchFromBaidu() {

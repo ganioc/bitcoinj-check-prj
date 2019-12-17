@@ -1,4 +1,4 @@
-package app;
+package lib.rfc;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -92,7 +92,7 @@ public class DemoAddr {
 
         try {
             Address addr = Address.fromBase58(params, str);
-  
+
         } catch (AddressFormatException e) {
             System.err.println("Wrong addr");
             return false;
