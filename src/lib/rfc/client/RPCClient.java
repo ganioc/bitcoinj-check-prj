@@ -65,20 +65,20 @@ public class RPCClient {
             return fb;
 
         } catch (IllegalStateException e) {
-            fb.ret = -1;
+            fb.ret = IfFeedback.WRONG_POST;
             fb.resp = "illegal state";
 
         } catch (ProtocolException e) {
-            fb.ret = -1;
+            fb.ret = IfFeedback.WRONG_POST;
             fb.resp = "protocol";
         } catch (MalformedURLException e) {
-            fb.ret = -1;
+            fb.ret = IfFeedback.WRONG_POST;
             fb.resp = "malformed url";
         } catch (IOException e) {
-            fb.ret = -1;
+            fb.ret = IfFeedback.WRONG_POST;
             fb.resp = "io";
         } catch (Exception e) {
-            fb.ret = -1;
+            fb.ret = IfFeedback.WRONG_POST;
             fb.resp = "send json";
         }
 
@@ -93,7 +93,7 @@ public class RPCClient {
             sendobj.put("funName", funcName);
             sendobj.put("args", funcArgs);
         } catch (JSONException e) {
-            fb.ret = -1;
+            fb.ret = IfFeedback.WRONG_JSON;
             fb.resp = "NOK";
             return fb;
         }

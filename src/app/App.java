@@ -6,6 +6,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import lib.rfc.client.IfArgs;
@@ -13,6 +14,7 @@ import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
 import lib.rfc.client.RPCClient;
 import lib.rfc.DemoAddr;
+import lib.rfc.DemoStatus;
 
 public class App {
     public static void fetchFromBaidu() {
@@ -179,5 +181,18 @@ public class App {
         }
 
         System.out.println(DemoAddr.isValidAddress("15nnW962zo4BSdaoc95humWZ1efvMGjPiH"));
+
+        System.out.println("\nGet balance is:");
+        IfFeedback fb2 = DemoStatus.getBalance(client, "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r");
+        System.out.println(fb2);
+        System.out.println("balance:" + fb2.resp); // in string format
+
+        System.out.println("\nGet latest block:");
+        fb2 = DemoStatus.getBlock(client);
+        System.out.println(fb2);
+        System.out.println("current height:" + fb2.resp);
+
+        System.out.println("\nGet transaction info:");
+
     }
 }
