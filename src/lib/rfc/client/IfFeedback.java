@@ -14,6 +14,8 @@ public class IfFeedback {
     public static int OK = 0;
     public static int WRONG_ADDRESS = -1;
     public static int WRONG_JSON = -2;
+    public static int WRONG_AMOUNT = -3;
+    public static int WRONG_FEE = -4;
     public static int WRONG_POST = -100;
     public static int WRONG_RPC_RETURN = -200;
 

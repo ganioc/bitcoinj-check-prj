@@ -12,6 +12,49 @@ public class DemoStatus {
         public IfFeedback apply(T t);
     }
 
+    public static IfFeedback getNonce(RPCClient client, String addr) {
+        IfFeedback fb = new IfFeedback();
+
+        if (!DemoAddr.isValidAddress(addr)) {
+            fb.ret = IfFeedback.WRONG_ADDRESS;
+            fb.resp = "Wrong address";
+            return fb;
+        }
+
+        JSONObject funcArgs = new JSONObject();
+
+        try {
+            funcArgs.put("address", addr);
+
+        } catch (JSONException e) {
+            fb.ret = IfFeedback.WRONG_JSON;
+            return fb;
+        }
+
+        fb = client.callAsync("getNonce", funcArgs);
+
+        if (fb.ret != IfFeedback.OK) {
+            return fb;
+        }
+
+        try {
+            JSONObject mJson = new JSONObject(fb.resp);
+            // System.out.println(mJson);
+            // System.out.println(mJson.get("err"));
+            int err = mJson.getInt("err");
+
+            if (err != 0) {
+                throw new JSONException("");
+            }
+
+            return fb;
+
+        } catch (JSONException e) {
+            fb.ret = IfFeedback.WRONG_RPC_RETURN;
+            return fb;
+        }
+    }
+
     public static IfFeedback getBalance(RPCClient client, String addr) {
         IfFeedback fb = new IfFeedback();
 
@@ -101,8 +144,8 @@ public class DemoStatus {
 
         try {
             JSONObject mJson = new JSONObject(fb.resp);
-            System.out.println(mJson);
-            System.out.println(mJson.get("err"));
+            // System.out.println(mJson);
+            // System.out.println(mJson.get("err"));
             int err = mJson.getInt("err");
 
             if (err != 0) {
@@ -145,15 +188,15 @@ public class DemoStatus {
         IfFeedback fb = new IfFeedback();
         try {
             JSONObject mJson = new JSONObject(resp);
-            System.out.println(mJson);
-            System.out.println(mJson.get("err"));
+            // System.out.println(mJson);
+            // System.out.println(mJson.get("err"));
             int err = mJson.getInt("err");
 
             if (err != 0) {
                 fb.ret = IfFeedback.WRONG_RPC_RETURN;
                 return fb;
             }
-            System.out.println(mJson.get("value"));
+            // System.out.println(mJson.get("value"));
 
             String strNum = mJson.getString("value");
             strNum = strNum.replace("n", "");

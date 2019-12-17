@@ -1,5 +1,6 @@
 package lib.rfc;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 
@@ -99,5 +100,15 @@ public class DemoAddr {
         }
 
         return true;
+    }
+
+    public static boolean isValidAmount(final String str) {
+
+        return true;
+    }
+
+    public static boolean isValidFee(final String str) {
+        double num = Integer.valueOf(str);
+        return num >= 0.1;
     }
 }

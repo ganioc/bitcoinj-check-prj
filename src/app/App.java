@@ -6,6 +6,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import com.mysql.jdbc.Buffer;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +15,7 @@ import lib.rfc.client.IfArgs;
 import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
 import lib.rfc.client.RPCClient;
+import lib.rfc.tx.Encoding;
 import lib.rfc.DemoAddr;
 import lib.rfc.DemoStatus;
 
@@ -89,10 +92,10 @@ public class App {
 
         // aBoy.use();
 
-        System.out.println("");
+        // System.out.println("");
 
-        MyThread th = new MyThread();
-        th.start();
+        // MyThread th = new MyThread();
+        // th.start();
 
         // App.fetchFromBaidu();
 
@@ -185,14 +188,50 @@ public class App {
         System.out.println("\nGet balance is:");
         IfFeedback fb2 = DemoStatus.getBalance(client, "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r");
         System.out.println(fb2);
-        System.out.println("balance:" + fb2.resp); // in string format
+        // System.out.println("balance:" + fb2.resp); // in string format
 
         System.out.println("\nGet latest block:");
         fb2 = DemoStatus.getBlock(client);
-        System.out.println(fb2);
+        // System.out.println(fb2);
+        System.out.println("current height:" + fb2.resp);
+
+        System.out.println("\nGet block 1498:");
+        fb2 = DemoStatus.getBlock(client, 1498);
+        // System.out.println(fb2);
         System.out.println("current height:" + fb2.resp);
 
         System.out.println("\nGet transaction info:");
+        fb2 = DemoStatus.getTransaction(client, "76f18f540323e7cf78619cfb41bb38687d06a12dec0b034fa0742ced93217e5f");
+        // System.out.println(fb2);
+        System.out.println("response:" + fb2.resp);
+        // block
 
+        System.out.println(
+                "\nGet transaction info:" + "4ed9a2c9b464da82eaa1afcb4bde8f4a07af27a9f31c8ac70d195075344022dc");
+        fb2 = DemoStatus.getTransaction(client, "4ed9a2c9b464da82eaa1afcb4bde8f4a07af27a9f31c8ac70d195075344022dc");
+        System.out.println(fb2);
+        // System.out.println("response:" + fb2.resp);
+        // block/receipt.returnCode = 0 transaction success
+
+        System.out.println("\nGet nonce:");
+        fb2 = DemoStatus.getNonce(client, "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r");
+
+        System.out.println(fb2);
+
+        byte[] ONE_HASH = "0100000000000000000000000000000000000000000000000000000000000000".getBytes();
+
+        int val1 = 0x15;
+        System.out.println(Integer.toHexString(val1));
+
+        //
+        System.out.println("\nbyte array:");
+        byte[] mByte = Encoding.textToBytes("0100000000000000000000000000000000000000000000000000000000000000");
+        for (int i = 0; i < mByte.length; i++) {
+            System.out.println(mByte[i]);
+        }
+
+        System.out.println(Encoding.bytesToText(mByte));
+
+        // Encoding.test();
     }
 }

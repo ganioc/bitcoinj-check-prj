@@ -56,7 +56,7 @@ public class RPCClient {
 
             while ((output = in.readLine()) != null) {
                 out += output;
-                System.out.println(output);
+                // System.out.println(output);
             }
             conn.disconnect();
             fb.ret = 0;
