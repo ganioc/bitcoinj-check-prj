@@ -311,12 +311,28 @@ public class BufferWriter {
                 data[off++] = mbuf[6];
                 data[off++] = mbuf[7];
                 break;
-            // case WriteOp.VARINT:
-            // // off = Encoding.writeVarint(data, op.value, off);
-            // break;
-            // case WriteOp.VARINT2:
-            // // off = Encoding.writeVarint2(data, op.value, off);
-            // break;
+            case WriteOp.VARINT:
+                // off = Encoding.writeVarint(data, op.value, off);
+                // break;
+                // case WriteOp.VARINT2:
+                // // off = Encoding.writeVarint2(data, op.value, off);
+                mInt = ((WriteOpInt) op).value;
+                if (mInt < 0xfd) {
+                    data[off++] = (byte) (mInt & 0xff);
+
+                } else if (mInt <= 0xffff) {
+                    data[off++] = (byte) (0xfd);
+                    data[off++] = (byte) (mInt & 0xff);
+                    data[off++] = (byte) ((mInt >> 8) & 0xff);
+
+                } else if (mInt <= 0xffffffff) {
+                    data[off++] = (byte) 0xfe;
+                    data[off++] = (byte) (mInt & 0xff);
+                    data[off++] = (byte) ((mInt >> 8) & 0xff);
+                    data[off++] = (byte) ((mInt >> 16) & 0xff);
+                    data[off++] = (byte) (mInt >> 24);
+                }
+                break;
             case WriteOp.BYTES:
                 // off += op.value.copy(data, off);
                 mByte = ((WriteOpBytes) op).value;

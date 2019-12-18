@@ -13,9 +13,24 @@ public class BaseTransaction extends SerializableWithHash {
     private int m_nonce;
     private JSONObject m_input;
 
+    public JSONObject getObject() {
+        JSONObject obj = super.getObject();
+        try {
+            obj.put("m_publicKey", this.m_publicKey);
+            obj.put("m_signature", this.m_signature);
+            obj.put("m_method", this.m_method);
+            obj.put("m_nonce", this.m_nonce);
+            obj.put("m_input", this.m_input);
+        } catch (JSONException e) {
+            System.err.println("BaseTransaction getObject");
+            return new JSONObject();
+        }
+        return obj;
+    }
+
     public BaseTransaction() {
         super();
-        m_publicKey = "";
+        m_publicKey = Encoding.ZERO_KEY;
         m_signature = Digest.textToBytes(Encoding.ZERO_SIG64);
         m_method = "";
         m_nonce = -1;
@@ -57,21 +72,34 @@ public class BaseTransaction extends SerializableWithHash {
         return Digest.verify();
     }
 
-    public byte[] sign(String privateKey) {
-        if (privateKey.length() > 0) {
-            m_publicKey = DemoAddr.publicKeyFromSecretKey(privateKey);
-            this.updateHash();
-            m_signature = Digest.sign(this.m_hash, privateKey);
-        }
-        return null;
-
+    public void setPublicKey(String s) {
+        this.m_publicKey = s;
     }
 
+    public void updateHash(String hash) {
+        this.hash(hash);
+    }
+
+    protected void updateSignature(String privateKey) {
+        this.m_signature = Digest.sign(this.hash(), privateKey);
+    }
+
+    // protected String _genHash() {
+    // BufferWriter contentWriter = new BufferWriter();
+
+    // this._encodeHashContent(contentWriter);
+
+    // byte[] bytes = contentWriter.render();
+    // byte[] byteHash = Digest.hash256(bytes, bytes.length);
+
+    // return Digest.bytesToText(byteHash);
+    // }
+
     public int encode(BufferWriter writer) {
-        int err = super.encode(writer);
-        if (err != 0) {
-            return err;
-        }
+        // int err = super.encode(writer);
+        // if (err != 0) {
+        // return err;
+        // }
         writer.writeBytes(this.m_signature);
         return 0;
     }

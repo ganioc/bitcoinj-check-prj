@@ -5,49 +5,66 @@ import org.json.JSONObject;
 
 class SerializableWithHash {
 
-    public String m_hash;
+    private String m_hash;
 
     public SerializableWithHash() {
         m_hash = Encoding.NULL_HASH;
+    }
+
+    public JSONObject getObject() {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("m_hash", this.m_hash);
+        } catch (JSONException e) {
+            System.err.println("SerializableWithHash error");
+            return obj;
+        }
+        return obj;
     }
 
     public String hash() {
         return m_hash;
     }
 
-    public int encode(BufferWriter writer) {
-        return _encodeHashContent(writer);
+    public void hash(String s) {
+        m_hash = s;
     }
 
-    public int decode() {
-        this.updateHash();
-        return _decodeHashContent();
-    }
+    // public int encode(BufferWriter writer) {
+    // return _encodeHashContent(writer);
+    // }
 
-    public void updateHash() {
-        this.m_hash = this._genHash();
-    }
+    // public int decode() {
+    // this.updateHash();
+    // return _decodeHashContent();
+    // }
 
-    protected int _encodeHashContent(BufferWriter writer) {
-        return 0;
-    }
+    // public void updateHash() {
+    // this.m_hash = this._genHash();
+    // }
 
-    protected int _decodeHashContent() {
-        return 0;
-    }
+    // protected int _encodeHashContent(BufferWriter writer) {
+    // return 0;
+    // }
 
-    protected String _genHash() {
-        BufferWriter contentWriter = new BufferWriter();
+    // protected int _decodeHashContent() {
+    // return 0;
+    // }
 
-        byte[] bytes = contentWriter.render();
-        byte[] byteHash = Digest.hash256(bytes, bytes.length);
+    // protected String _genHash() {
+    // BufferWriter contentWriter = new BufferWriter();
 
-        return Digest.bytesToText(byteHash);
-    }
+    // this._encodeHashContent(contentWriter);
 
-    protected boolean _verifyHash() {
-        return this.hash() == this._genHash();
-    }
+    // byte[] bytes = contentWriter.render();
+    // byte[] byteHash = Digest.hash256(bytes, bytes.length);
+
+    // return Digest.bytesToText(byteHash);
+    // }
+
+    // protected boolean _verifyHash() {
+    // return this.hash() == this._genHash();
+    // }
 
     public JSONObject stringify() {
         JSONObject obj = new JSONObject();

@@ -16,6 +16,7 @@ import lib.rfc.client.IfArgs;
 import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
 import lib.rfc.client.RPCClient;
+import lib.rfc.tx.BufferWriter;
 import lib.rfc.tx.Digest;
 import lib.rfc.tx.Encoding;
 import lib.rfc.tx.ValueTransaction;
@@ -67,7 +68,51 @@ public class App {
         System.out.print("go");
         System.out.println("End");
 
-        test2();
+        test4();
+    }
+
+    private static void test4() {
+        String method = "transferTo";
+
+        BufferWriter contentWriter = new BufferWriter();
+        contentWriter.writeVarString(method);
+        byte[] bytes = contentWriter.render();
+
+        System.out.println("\nmethod: " + method);
+        System.out.println(Digest.bytesToText(bytes));
+        for (int i = 0; i < bytes.length; i++) {
+            System.out.println(Integer.toHexString(bytes[i] + 0));
+        }
+    }
+
+    private static test
+
+    private static void test3() {
+        BigDecimal amount = new BigDecimal(100);
+        BigDecimal fee = new BigDecimal(0.1);
+        String address = "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r";
+        String secret = "6f1df947d7942faf4110595f3aad1f2670e11b81ac9c1d8ee98806d81ec5f591";
+
+        ValueTransaction tx = new ValueTransaction();
+        tx.method("transferTo");
+        tx.value(amount);
+        tx.fee(fee);
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("to", address);
+        } catch (JSONException e) {
+            System.err.println("Wrong input json");
+            return;
+        }
+        tx.input(obj);
+        tx.nonce(1);
+
+        System.out.println("\nBefore sign");
+        System.out.println(tx);
+
+        System.out.println("\nAfter sign");
+        tx.sign(secret);
+        System.out.println(tx);
     }
 
     private static void test2() {
