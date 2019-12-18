@@ -2,6 +2,7 @@ package app;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,7 +16,9 @@ import lib.rfc.client.IfArgs;
 import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
 import lib.rfc.client.RPCClient;
+import lib.rfc.tx.Digest;
 import lib.rfc.tx.Encoding;
+import lib.rfc.tx.ValueTransaction;
 import lib.rfc.DemoAddr;
 import lib.rfc.DemoStatus;
 
@@ -64,6 +67,42 @@ public class App {
         System.out.print("go");
         System.out.println("End");
 
+        test2();
+    }
+
+    private static void test2() {
+        System.out.println("\ntest2");
+        System.out.println("\nDo some test");
+        String priv = "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
+        System.out.println("priv");
+        System.out.println(priv);
+        System.out.println(DemoAddr.addressFromSecretKey(priv));
+
+        System.out.println(DemoAddr.publicKeyFromSecretKey(priv));
+
+        System.out.println("\nAddr from pub");
+        String strPub = DemoAddr.publicKeyFromSecretKey(priv);
+        String strAddr = DemoAddr.addressFromPublicKey(strPub);
+
+        System.out.println(strAddr);
+
+        System.out.println("\nTest value transaction");
+        ValueTransaction tx = new ValueTransaction();
+        tx.method("transferTo");
+        tx.value(new BigDecimal(100));
+        tx.fee(new BigDecimal(0.1));
+        try {
+            JSONObject inp = new JSONObject();
+            inp.put("to", strAddr);
+            tx.input(inp);
+        } catch (JSONException e) {
+            System.err.println("JSON error");
+            System.err.println(e);
+        }
+
+    }
+
+    private void test1() {
         // float p, b;
         // double area = 0, hyp = 0;
         // InputStreamReader read = new InputStreamReader(System.in);
@@ -120,7 +159,12 @@ public class App {
         funcArg.method = "getBalance";
 
         funcArg.params = new JSONObject();
-        funcArg.params.put("address", "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r");
+        try {
+            funcArg.params.put("address", "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r");
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         System.out.println(funcN);
         System.out.println(funcArg);
@@ -145,9 +189,13 @@ public class App {
 
         System.out.println("public key:");
         System.out.println(DemoAddr.publicKeyFromSecretKey(secret));
+        String strPubKey = DemoAddr.publicKeyFromSecretKey(secret);
 
         System.out.println("address:");
         System.out.println(DemoAddr.addressFromSecretKey(secret));
+
+        System.out.println("address2:");
+        System.out.println(DemoAddr.addressFromPublicKey(strPubKey));
 
         System.out.println("\nDo some test");
         String priv = "1E99423A4ED27608A15A2616A2B0E9E52CED330AC530EDCC32C8FFC6A526AEDD";
@@ -225,12 +273,12 @@ public class App {
 
         //
         System.out.println("\nbyte array:");
-        byte[] mByte = Encoding.textToBytes("0100000000000000000000000000000000000000000000000000000000000000");
+        byte[] mByte = Digest.textToBytes("0100000000000000000000000000000000000000000000000000000000000000");
         for (int i = 0; i < mByte.length; i++) {
             System.out.println(mByte[i]);
         }
 
-        System.out.println(Encoding.bytesToText(mByte));
+        System.out.println(Digest.bytesToText(mByte));
 
         // Encoding.test();
     }

@@ -11,13 +11,14 @@ public class IfFeedback {
     public int ret = 0;
     public String resp;
 
-    public static int OK = 0;
-    public static int WRONG_ADDRESS = -1;
-    public static int WRONG_JSON = -2;
-    public static int WRONG_AMOUNT = -3;
-    public static int WRONG_FEE = -4;
-    public static int WRONG_POST = -100;
-    public static int WRONG_RPC_RETURN = -200;
+    public static final int OK = 0;
+    public static final int WRONG_ADDRESS = -1;
+    public static final int WRONG_JSON = -2;
+    public static final int WRONG_AMOUNT = -3;
+    public static final int WRONG_FEE = -4;
+    public static final int WRONG_POST = -100;
+    public static final int WRONG_RPC_RETURN = -200;
+    public static final int WRONG_TX_ENCODE = -300;
 
     public String toString() {
         JSONObject obj = new JSONObject();

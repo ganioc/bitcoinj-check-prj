@@ -12,6 +12,9 @@ import java.net.URL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import lib.rfc.tx.BufferWriter;
+import lib.rfc.tx.ValueTransaction;
+
 public class RPCClient {
     private String m_url;
     private IfSysinfo m_sysInfo;
@@ -100,5 +103,36 @@ public class RPCClient {
 
         return postTo(sendobj.toString());
 
+    }
+
+    public IfFeedback sendAndCheckTx(ValueTransaction tx, String secret) {
+        IfFeedback fb = new IfFeedback();
+
+        tx.sign(secret);
+
+        return fb;
+    }
+
+    public IfFeedback sendTransaction(ValueTransaction tx) {
+        IfFeedback fb = new IfFeedback();
+
+        BufferWriter writer = new BufferWriter();
+        int err = tx.encode(writer);
+
+        if (err != 0) {
+            System.err.println("tx encode failure");
+            fb.ret = IfFeedback.WRONG_TX_ENCODE;
+            return fb;
+        }
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("tx", writer.render());
+        } catch (JSONException e) {
+            System.err.println("tx create ojb");
+            fb.ret = IfFeedback.WRONG_TX_ENCODE;
+            return fb;
+        }
+
+        return fb;
     }
 }

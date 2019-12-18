@@ -1,5 +1,6 @@
 package lib.rfc.tx;
 
+import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.util.Vector;
 
@@ -373,7 +374,7 @@ public class BufferWriter {
 
     }
 
-    private void writeU32(int value) {
+    public void writeU32(int value) {
         offset += 4;
         ops.add(new WriteOpInt(WriteOp.UI32, value, 0, 0));
 
@@ -456,7 +457,7 @@ public class BufferWriter {
     // this.offset += 4;
     // ops.add(new WriteOpDouble(WriteOp.DBL, value, 0, 0));
     // }
-    private void writeBytes(byte[] value) {
+    public void writeBytes(byte[] value) {
         if (value.length == 0) {
             return;
         }
@@ -464,8 +465,9 @@ public class BufferWriter {
         ops.add(new WriteOpBytes(WriteOp.BYTES, value, 0, 0));
     }
 
-    private void writeBigNumber(byte[] value) {
-        writeBytes(value);
+    public void writeBigNumber(BigDecimal val) {
+        // writeBytes(value);
+        this.writeVarString(val.toString());
     }
 
     private void copy(byte[] value, int start, int end) {
@@ -480,6 +482,19 @@ public class BufferWriter {
     private void writeString(String value) {
         byte[] bytes = value.getBytes();
         writeBytes(bytes);
+    }
+
+    public void writeVarString(String value) {
+        if (value.length() == 0) {
+            this.offset += Encoding.sizeVarint(0);
+            this.ops.add(new WriteOpInt(WriteOp.VARINT, 0, 0, 0));
+        }
+        int size = value.length();
+        this.offset += Encoding.sizeVarint(size);
+        this.offset += size;
+
+        this.ops.add(new WriteOpInt(WriteOp.VARINT, size, 0, 0));
+        this.ops.add(new WriteOpBytes(WriteOp.BYTES, value.getBytes(), 0, 0));
     }
 
     private void writeNullString(String value) {

@@ -1,48 +1,54 @@
 package lib.rfc.tx;
 
+import java.math.BigDecimal;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-interface JSONable {
-    String stringify();
-}
+public class ValueTransaction extends BaseTransaction {
 
-interface Serializable {
-    boolean encode();
+    private BigDecimal m_value; // String to prevent difference between JS BigNumber
+    private BigDecimal m_fee;
 
-    boolean decode();
-}
+    public ValueTransaction() {
+        super();
+        this.m_value = new BigDecimal(0);
+        this.m_fee = new BigDecimal(0);
 
-class SerializableWithHash {
-    private String m_hash;
-
-    public SerializableWithHash() {
-        m_hash = Encoding.NULL_HASH;
     }
 
-    public String stringify() {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("hash", m_hash);
-        } catch (JSONException e) {
-            System.err.println("JSON");
-            return "";
+    public BigDecimal value() {
+        return this.m_value;
+    }
+
+    public void value(BigDecimal val) {
+        this.m_value = val;
+    }
+
+    public void value(String val) {
+        this.m_value = new BigDecimal(val);
+    }
+
+    public BigDecimal fee() {
+        return this.m_fee;
+    }
+
+    public void fee(BigDecimal val) {
+        this.m_fee = val;
+    }
+
+    public void fee(String val) {
+        this.m_fee = new BigDecimal(val);
+    }
+
+    protected int _encodeHashContent(BufferWriter writer) {
+        int err = super._encodeHashContent(writer);
+        if (err != 0) {
+            return err;
         }
-        return obj.toString();
+        writer.writeBigNumber(this.m_value);
+        writer.writeBigNumber(this.m_fee);
+        return 0;
     }
-
-    public boolean encode() {
-        // return _encodeHashContent();
-        return false;
-    }
-
-    public boolean decode() {
-
-        return false;
-    }
-
-}
-
-public class ValueTransaction {
 
 }

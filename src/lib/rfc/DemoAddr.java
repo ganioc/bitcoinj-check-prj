@@ -36,6 +36,11 @@ public class DemoAddr {
         return addr + "";
     }
 
+    public static String addressFromPublicKey(String pub) {
+
+        return "";
+    }
+
     /**
      * get public address from secret key
      * 
