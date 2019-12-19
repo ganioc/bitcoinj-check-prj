@@ -12,6 +12,7 @@ import com.mysql.jdbc.Buffer;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import jdk.nashorn.internal.runtime.regexp.joni.ast.ConsAltNode;
 import lib.rfc.client.IfArgs;
 import lib.rfc.client.IfFeedback;
 import lib.rfc.client.IfSysinfo;
@@ -65,10 +66,11 @@ public class App {
 
     public static void main(String[] args) throws Exception {
         System.out.println("Hello Java");
-        System.out.print("go");
-        System.out.println("End");
+        System.out.println("go .... ....");
 
-        test4();
+        test5();
+
+        System.out.println("End");
     }
 
     private static void test4() {
@@ -83,9 +85,61 @@ public class App {
         for (int i = 0; i < bytes.length; i++) {
             System.out.println(Integer.toHexString(bytes[i] + 0));
         }
+
     }
 
-    private static test
+    private static void test5() {
+
+        int nonce = 1;
+        String method = "transferTo";
+        BigDecimal amount = new BigDecimal(100);
+        BigDecimal fee = new BigDecimal(0.1);
+        String address = "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r";
+        JSONObject mObj = new JSONObject();
+        try {
+            mObj.put("to", address);
+        } catch (JSONException e) {
+            System.exit(1);
+        }
+
+        String secret = "6f1df947d7942faf4110595f3aad1f2670e11b81ac9c1d8ee98806d81ec5f591";
+        int[] intPubKey = { 0x02, 0xc7, 0x94, 0x68, 0x84, 0x91, 0x8d, 0xcc, 0x3f, 0x23, 0x4e, 0x60, 0xae, 0xfa, 0x6c,
+                0x32, 0x69, 0x16, 0x9e, 0x5a, 0x27, 0xd3, 0x38, 0x24, 0xc8, 0xd1, 0xe1, 0x0e, 0x2b, 0x77, 0x46, 0xe8,
+                0x9d };
+        byte[] pubKey = new byte[33];
+        for (int i = 0; i < pubKey.length; i++) {
+            pubKey[i] = (byte) (intPubKey[i] & 0xff);
+        }
+        System.out.println(Digest.bytesToText(pubKey));
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("data", Digest.bytesToInts(pubKey));
+        } catch (JSONException e) {
+            System.err.println("JSON err");
+            System.exit(1);
+        }
+        System.out.println(obj.toString());
+
+        System.out.println("\n\nTest binary generation:");
+        BufferWriter writer = new BufferWriter();
+        writer.writeVarString(method);
+        writer.writeU32(nonce);
+        writer.writeBytes(pubKey);
+        String input = Encoding.toStringifiable(mObj, true);
+        writer.writeVarString(input);
+        writer.writeBigNumber(amount);
+        writer.writeBigNumber(fee);
+
+        byte[] content = writer.render();
+        System.out.println(Digest.bytesToText(content));
+
+        System.out.println("\nhash256:");
+        byte[] byteHash = Digest.hash256(content, content.length);
+        String strHash = Digest.bytesToText(byteHash);
+        System.out.println(strHash);
+
+    }
 
     private static void test3() {
         BigDecimal amount = new BigDecimal(100);

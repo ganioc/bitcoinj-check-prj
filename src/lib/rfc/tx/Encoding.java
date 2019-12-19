@@ -8,6 +8,7 @@ import java.util.Iterator;
 import org.json.JSONObject;
 
 public class Encoding {
+    public static final int MAX_DECIMAL_LEN = 9;
     public static final Charset encodingType = StandardCharsets.UTF_8;
     public static final String ONE_HASH = "0100000000000000000000000000000000000000000000000000000000000000";
     public static final String ZERO_HASH = "0000000000000000000000000000000000000000000000000000000000000000";
@@ -93,7 +94,9 @@ public class Encoding {
 
                 Object o1 = input.get(o.toString());
                 if (o1.getClass() == String.class) {
+                    sb.append("\"");
                     sb.append("s" + o1);
+                    sb.append("\"");
                 } else if (o1.getClass() == BigDecimal.class) {
                     sb.append("n" + o1);
                 } else if (o1.getClass() == Integer.class) {

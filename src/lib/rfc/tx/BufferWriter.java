@@ -331,15 +331,18 @@ public class BufferWriter {
                     data[off++] = (byte) ((mInt >> 8) & 0xff);
                     data[off++] = (byte) ((mInt >> 16) & 0xff);
                     data[off++] = (byte) (mInt >> 24);
+                } else {
+                    // We dont have number that big
+                    System.exit(-1);
                 }
                 break;
+            case WriteOp.STR:
             case WriteOp.BYTES:
                 // off += op.value.copy(data, off);
                 mByte = ((WriteOpBytes) op).value;
                 for (int ii = 0; ii < mByte.length; ii++) {
                     data[off++] = mByte[ii];
                 }
-
                 break;
             // case WriteOp.STR:
             // // off += data.write(op.value, off, op.enc);
@@ -393,7 +396,6 @@ public class BufferWriter {
     public void writeU32(int value) {
         offset += 4;
         ops.add(new WriteOpInt(WriteOp.UI32, value, 0, 0));
-
     }
 
     private void writeU32BE(int value) {
@@ -482,8 +484,10 @@ public class BufferWriter {
     }
 
     public void writeBigNumber(BigDecimal val) {
-        // writeBytes(value);
-        this.writeVarString(val.toString());
+        val = val.setScale(Encoding.MAX_DECIMAL_LEN, BigDecimal.ROUND_HALF_UP);
+        String str = val.stripTrailingZeros().toPlainString();
+
+        this.writeVarString(str);
     }
 
     private void copy(byte[] value, int start, int end) {
@@ -510,7 +514,7 @@ public class BufferWriter {
         this.offset += size;
 
         this.ops.add(new WriteOpInt(WriteOp.VARINT, size, 0, 0));
-        this.ops.add(new WriteOpBytes(WriteOp.BYTES, value.getBytes(), 0, 0));
+        this.ops.add(new WriteOpBytes(WriteOp.STR, value.getBytes(), 0, 0));
     }
 
     private void writeNullString(String value) {

@@ -12,7 +12,7 @@ public class Digest {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] bytes = Arrays.copyOf(inBytes, offset);
             byte[] encodedhash = digest.digest(bytes);
-            return encodedhash;
+            return digest.digest(encodedhash);
         } catch (NoSuchAlgorithmException e) {
             return null;
         }
@@ -68,6 +68,14 @@ public class Digest {
         // str = "0" + str;
         // }
         return str;
+    }
+
+    public static int[] bytesToInts(byte[] buf) {
+        int[] ints = new int[buf.length];
+        for (int i = 0; i < buf.length; i++) {
+            ints[i] = buf[i] < 0 ? ((int) buf[i] + 256) : (int) buf[i];
+        }
+        return ints;
     }
 
     public static boolean verify() {
