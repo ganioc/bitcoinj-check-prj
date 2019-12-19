@@ -90,6 +90,8 @@ public class App {
 
     private static void test5() {
 
+        // System.loadLibrary("secp256k1");
+
         int nonce = 1;
         String method = "transferTo";
         BigDecimal amount = new BigDecimal(100);
@@ -138,6 +140,10 @@ public class App {
         byte[] byteHash = Digest.hash256(content, content.length);
         String strHash = Digest.bytesToText(byteHash);
         System.out.println(strHash);
+
+        System.out.println("\nSignature:");
+        // byte[] signature = Digest.sign(strHash, secret);
+        // System.out.println(Digest.bytesToText(signature));
 
     }
 

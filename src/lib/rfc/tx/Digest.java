@@ -1,9 +1,15 @@
 package lib.rfc.tx;
 
+import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
+import org.bitcoin.NativeSecp256k1;
+import org.bitcoin.NativeSecp256k1Util;
+import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.Sha256Hash;
+import org.bitcoinj.core.ECKey.ECDSASignature;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
 
 public class Digest {
@@ -83,8 +89,23 @@ public class Digest {
         return false;
     }
 
-    public static byte[] sign(String hash, String privateKey) {
+    public static byte[] sign(String hash, String secret) {
+        // BigInteger priv = new BigInteger(secret, 16);
+        // ECKey secretKey = ECKey.fromPrivate(priv);
+        // Sha256Hash shahash = Sha256Hash.wrap(hash);
+        // ECDSASignature signature = secretKey.sign(shahash);
 
-        return null;
+        // hash, secret must be 32 bytes
+        byte[] byteHash = textToBytes(hash);
+        byte[] byteSecret = textToBytes(secret);
+        byte[] sign;
+        try {
+            sign = NativeSecp256k1.sign(byteHash, byteSecret);
+        } catch (NativeSecp256k1Util.AssertFailException e) {
+            System.err.println("sign err");
+            return null;
+        }
+
+        return sign;
     }
 }
