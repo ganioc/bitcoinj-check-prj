@@ -10,6 +10,7 @@ import org.bitcoin.NativeSecp256k1Util;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.ECKey.ECDSASignature;
+import org.spongycastle.asn1.ASN1Integer;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
 
 public class Digest {
@@ -90,10 +91,20 @@ public class Digest {
     }
 
     public static byte[] sign(String hash, String secret) {
-        // BigInteger priv = new BigInteger(secret, 16);
-        // ECKey secretKey = ECKey.fromPrivate(priv);
-        // Sha256Hash shahash = Sha256Hash.wrap(hash);
-        // ECDSASignature signature = secretKey.sign(shahash);
+        BigInteger priv = new BigInteger(secret, 16);
+        ECKey secretKey = ECKey.fromPrivate(priv);
+        Sha256Hash shahash = Sha256Hash.wrap(hash);
+        ECDSASignature signature = secretKey.sign(shahash);
+
+        System.out.println(signature.r.toString(16));
+        System.out.println(signature.s.toString(16));
+
+        byte[] sign = textToBytes(signature.r.toString(16) + signature.s.toString(16));
+
+        return sign;
+    }
+
+    public static byte[] sign1(String hash, String secret) {
 
         // hash, secret must be 32 bytes
         byte[] byteHash = textToBytes(hash);

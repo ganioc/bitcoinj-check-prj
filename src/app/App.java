@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 import com.mysql.jdbc.Buffer;
 
@@ -68,9 +69,20 @@ public class App {
         System.out.println("Hello Java");
         System.out.println("go .... ....");
 
+        // testForSign();
         test5();
 
         System.out.println("End");
+    }
+
+    private static void testForSign() {
+        System.out.println("test sign()");
+        String secret = "6f1df947d7942faf4110595f3aad1f2670e11b81ac9c1d8ee98806d81ec5f591";
+        String hash = "777b46a4e661555b5d6f4fb03b3798da4053564f75207e71c6226552488d89b0";
+
+        byte[] signature = Digest.sign(hash, secret);
+        int[] sigInt = Digest.bytesToInts(signature);
+        System.out.println(Arrays.toString(sigInt));
     }
 
     private static void test4() {
@@ -142,8 +154,36 @@ public class App {
         System.out.println(strHash);
 
         System.out.println("\nSignature:");
-        // byte[] signature = Digest.sign(strHash, secret);
-        // System.out.println(Digest.bytesToText(signature));
+        System.out.println(System.getProperty("java.library.path"));
+        byte[] signature = Digest.sign(strHash, secret);
+        System.out.println(Arrays.toString(Digest.bytesToInts(signature)));
+
+        //
+        System.out.println("\nGenerate package");
+
+        writer = new BufferWriter();
+        writer.writeVarString(method);
+        writer.writeU32(nonce);
+        writer.writeBytes(pubKey);
+        input = Encoding.toStringifiable(mObj, true);
+        writer.writeVarString(input);
+        writer.writeBigNumber(amount);
+        writer.writeBigNumber(fee);
+        writer.writeBytes(signature);
+
+        byte[] dataBuf = writer.render();
+        JSONObject objSend = new JSONObject();
+        JSONObject objArgs = new JSONObject();
+        try {
+
+            objArgs.put("data", dataBuf);
+            objArgs.put("type", "Buffer");
+            objSend.put("args", objArgs);
+            objSend.put("funName", "sendTransaction");
+        } catch (JSONException e) {
+            System.err.println("Wrong JSON objSend");
+        }
+        System.out.println(objSend.toString());
 
     }
 
