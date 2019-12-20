@@ -14,8 +14,8 @@ public class App {
         System.out.println("Hello Java");
 
         IfSysinfo info = new IfSysinfo();
-        info.secret = "a172732bc97865f5d059060d3523184442e2dab1ef8f2c6aff431ae9b68fd8d8";
-        info.address = "14pfYReBoVo93KCeFvfhuPmaeoz1vUnNAZ";
+        info.secret = "6f1df947d7942faf4110595f3aad1f2670e11b81ac9c1d8ee98806d81ec5f591";
+        info.address = "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r";
         info.host = "161.189.65.155";
         // info.host = "127.0.0.1";
         info.port = 18089;
