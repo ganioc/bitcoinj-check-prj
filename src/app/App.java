@@ -17,6 +17,7 @@ public class App {
         info.secret = "6f1df947d7942faf4110595f3aad1f2670e11b81ac9c1d8ee98806d81ec5f591";
         info.address = "154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r";
         info.host = "161.189.65.155";
+        // info.host = "127.0.0.1";
         info.port = 18089;
 
         System.out.println("\nCreate client");
@@ -80,8 +81,8 @@ public class App {
         System.out.println("response:" + fb2.resp);
 
         System.out.println(
-                "\nGet transaction info:" + "4ed9a2c9b464da82eaa1afcb4bde8f4a07af27a9f31c8ac70d195075344022dc");
-        fb2 = DemoStatus.getTransaction(client, "4ed9a2c9b464da82eaa1afcb4bde8f4a07af27a9f31c8ac70d195075344022dc");
+                "\nGet transaction info:" + "98bc05c0c81f24f925c9ad13662baf0f6d8a0283c069811f2dca2668701a5a06");
+        fb2 = DemoStatus.getTransaction(client, "98bc05c0c81f24f925c9ad13662baf0f6d8a0283c069811f2dca2668701a5a06");
         System.out.println(fb2);
 
         System.out.println("\nGet nonce:");

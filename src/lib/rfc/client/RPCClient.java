@@ -93,6 +93,7 @@ public class RPCClient {
         IfFeedback fb = new IfFeedback();
 
         JSONObject sendobj = new JSONObject();
+
         try {
             sendobj.put("funName", funcName);
             sendobj.put("args", funcArgs);
@@ -103,7 +104,7 @@ public class RPCClient {
         }
 
         String content = sendobj.toString();
-        System.out.println(content);
+        // System.out.println(content);
 
         return postTo(content);
 
@@ -122,18 +123,22 @@ public class RPCClient {
 
         byte[] dataBuf = tx.render();
         JSONObject objArgs = new JSONObject();
+        JSONObject objTx = new JSONObject();
         try {
 
             objArgs.put("data", Digest.bytesToInts(dataBuf));
             objArgs.put("type", "Buffer");
+            objTx.put("tx", objArgs);
         } catch (JSONException e) {
             System.err.println("Wrong JSON objSend");
             fb.ret = -1;
             return fb;
         }
-        System.out.println(objArgs);
+        System.out.println("\nsendTransaction");
 
-        fb = callAsync("sendTransaction", objArgs);
+        System.out.println(objTx);
+
+        fb = callAsync("sendTransaction", objTx);
 
         return fb;
     }

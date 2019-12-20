@@ -99,12 +99,18 @@ public class RTransaction {
         byte[] content = writer.render();
         byte[] byteHash = Digest.hash256(content, content.length);
         String strHash = Digest.bytesToText(byteHash);
+        System.out.println("\nHash:");
         System.out.println(strHash);
+        this.m_hash = strHash;
         System.out.println("\nSignature:");
         byte[] signature = Digest.sign(strHash, strPri);
 
         System.out.println(Arrays.toString(Digest.bytesToInts(signature)));
 
         return signature;
+    }
+
+    public String getHash() {
+        return this.m_hash;
     }
 }

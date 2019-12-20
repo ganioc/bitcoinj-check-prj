@@ -51,9 +51,9 @@ public class DemoTransfer {
             return fb;
         }
 
-        nonce = 1;
+        // nonce = 1;
         tx.setMethod("transferTo");
-        tx.setNonce(nonce);
+        tx.setNonce(nonce + 1);
         tx.setPublicKey(client.getSecret());
 
         JSONObject input = new JSONObject();
@@ -79,6 +79,13 @@ public class DemoTransfer {
         if (fb.ret != 0) {
             return fb;
         }
+
+        // check receipt
+        fb = DemoStatus.checkReceipt(client, tx.getHash());
+        if (fb.ret == 0) {
+            System.out.println("Confirmed: " + tx.getHash());
+        }
+        fb.resp = "OK";
 
         return fb;
     }

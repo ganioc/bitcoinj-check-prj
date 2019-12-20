@@ -184,6 +184,51 @@ public class DemoStatus {
         return fb;
     }
 
+    public static IfFeedback checkReceipt(RPCClient client, String hash) {
+        IfFeedback fb = new IfFeedback();
+        System.out.println("Check receipt for: " + hash);
+
+        for (int i = 0; i < 3; i++) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            fb = getTransaction(client, hash);
+
+            if (fb.ret == 0) {
+                // System.out.println(fb.resp);
+                // check if returnCode == 0, then break
+                try {
+                    JSONObject resp = new JSONObject(fb.resp);
+                    int err = resp.getInt("err");
+                    if (err != 0) {
+                        fb.ret = err;
+                        break;
+                    }
+                    JSONObject receipt = resp.getJSONObject("receipt");
+                    int returnCode = receipt.getInt("returnCode");
+                    if (returnCode == 0) {
+                        fb.ret = 0;
+                        break;
+                    } else {
+                        fb.ret = returnCode;
+                        break;
+                    }
+
+                } catch (JSONException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                    fb.ret = -1;
+                    continue;
+                }
+            }
+        }
+
+        return fb;
+    }
+
     private static IfFeedback parseGetBalance(String resp) {
         IfFeedback fb = new IfFeedback();
         try {
