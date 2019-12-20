@@ -23,9 +23,9 @@ public class App {
         System.out.println("\nCreate client");
         RPCClient client = new RPCClient(info);
 
-        // testDemoAddr();
+        testDemoAddr();
 
-        // testDemoStatus(client);
+        testDemoStatus(client);
 
         testDemoTransfer(client);
 
@@ -108,7 +108,5 @@ public class App {
         if (fb.ret != 0) {
             System.exit(-1);
         }
-
-        // check
     }
 }

@@ -5,7 +5,7 @@ DemoAddr     - Address, key, creation
 
 DemoStatus   - get chain height, block, transaction
 
-DemoTransfer - transferTo
+DemoTransfer - DemoTransfer.transferTo()
 
 ```
 bblock hash
