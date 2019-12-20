@@ -1,4 +1,17 @@
 # Introduction
+
+Developed by Java 1.8
+
+libs:
+
+- coinj 0.14.7
+
+entry:
+
+- src/app.java
+
+
+
 ## Simple JAVA
 
 DemoAddr     - Address, key, creation
@@ -18,7 +31,9 @@ Q: 交易签名出来的字节流，反序列化成一个json结构，里面有a
 
 A: 见Digest.parse()可以解析 byte[]为json, 如下所示
 
-{"input":"{\"to\":\"s154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r\"}",
+{
+
+"input":"{\"to\":\"s154bdF5WH3FXGo4v24F4dYwXnR8br8rc2r\"}",
 
 "amount":"100",
 
