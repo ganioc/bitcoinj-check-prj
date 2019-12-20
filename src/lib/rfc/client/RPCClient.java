@@ -13,14 +13,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import lib.rfc.tx.BufferWriter;
-import lib.rfc.tx.ValueTransaction;
+import lib.rfc.tx.Digest;
+import lib.rfc.tx.RTransaction;
 
 public class RPCClient {
     private String m_url;
     private IfSysinfo m_sysInfo;
 
-    public RPCClient(String serveraddr, int port, IfSysinfo sysinfo) {
-        this.m_url = new String("http://" + serveraddr + ":" + String.valueOf(port) + "/rpc");
+    public RPCClient(IfSysinfo sysinfo) {
+        this.m_url = new String("http://" + sysinfo.host + ":" + String.valueOf(sysinfo.port) + "/rpc");
         this.m_sysInfo = sysinfo;
     }
 
@@ -101,11 +102,14 @@ public class RPCClient {
             return fb;
         }
 
-        return postTo(sendobj.toString());
+        String content = sendobj.toString();
+        System.out.println(content);
+
+        return postTo(content);
 
     }
 
-    public IfFeedback sendAndCheckTx(ValueTransaction tx, String secret) {
+    public IfFeedback sendAndCheckTx(RTransaction tx, String secret) {
         IfFeedback fb = new IfFeedback();
 
         tx.sign(secret);
@@ -113,26 +117,32 @@ public class RPCClient {
         return fb;
     }
 
-    public IfFeedback sendTransaction(ValueTransaction tx) {
+    public IfFeedback sendTransaction(RTransaction tx) {
         IfFeedback fb = new IfFeedback();
 
-        BufferWriter writer = new BufferWriter();
-        int err = tx.encode(writer);
-
-        if (err != 0) {
-            System.err.println("tx encode failure");
-            fb.ret = IfFeedback.WRONG_TX_ENCODE;
-            return fb;
-        }
-        JSONObject obj = new JSONObject();
+        byte[] dataBuf = tx.render();
+        JSONObject objArgs = new JSONObject();
         try {
-            obj.put("tx", writer.render());
+
+            objArgs.put("data", Digest.bytesToInts(dataBuf));
+            objArgs.put("type", "Buffer");
         } catch (JSONException e) {
-            System.err.println("tx create ojb");
-            fb.ret = IfFeedback.WRONG_TX_ENCODE;
+            System.err.println("Wrong JSON objSend");
+            fb.ret = -1;
             return fb;
         }
+        System.out.println(objArgs);
+
+        fb = callAsync("sendTransaction", objArgs);
 
         return fb;
+    }
+
+    public String getAddress() {
+        return this.m_sysInfo.address;
+    }
+
+    public String getSecret() {
+        return this.m_sysInfo.secret;
     }
 }

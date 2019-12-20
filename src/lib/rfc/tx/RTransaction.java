@@ -52,7 +52,11 @@ public class RTransaction {
         this.m_fee = fee;
     }
 
-    public byte[] encode() {
+    public void setPublicKey(String strPri) {
+        this.m_publicKey = DemoAddr.publicKeyFromSecretKey(strPri);
+    }
+
+    public byte[] render() {
         BufferWriter writer = new BufferWriter();
         writer.writeVarString(this.m_method);
         writer.writeU32(this.m_nonce);
@@ -69,7 +73,6 @@ public class RTransaction {
 
     public boolean sign(String strPri) {
         if (strPri.length() > 0) {
-            this.m_publicKey = DemoAddr.publicKeyFromSecretKey(strPri);
 
             this.m_signature = this.updateData(strPri);
 

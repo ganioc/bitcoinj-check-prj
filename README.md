@@ -1,11 +1,11 @@
 # Introduction
+## API for chain
 
-DemoAddr
+DemoAddr     - Address, key, creation
 
-DemoStatus
+DemoStatus   - get chain height, block, transaction
 
-DemoTransfer
-
+DemoTransfer - transferTo
 
 ```
 bblock hash

@@ -11,14 +11,8 @@ import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 
 import java.security.SecureRandom;
-// import System.out.println;
 
 public class DemoAddr {
-
-    public static void main() {
-        System.out.println("DemoAddr.main()");
-
-    }
 
     /**
      * address from secret key ,
@@ -34,11 +28,6 @@ public class DemoAddr {
         Address addr = key.toAddress(params);
 
         return addr + "";
-    }
-
-    public static String addressFromPublicKey(String pub) {
-
-        return "";
     }
 
     /**
@@ -108,12 +97,48 @@ public class DemoAddr {
     }
 
     public static boolean isValidAmount(final String str) {
+        try {
+            BigDecimal num = new BigDecimal(str);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
+    public static boolean isValidAmount(final BigDecimal dec) {
+        try {
+            BigDecimal num = dec;
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
     public static boolean isValidFee(final String str) {
-        double num = Integer.valueOf(str);
-        return num >= 0.1;
+        try {
+            double num = Double.parseDouble(str);
+            return num >= 0.1;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+
+    }
+
+    public static boolean isValidFee(final int innum) {
+        try {
+            int num = innum;
+            return num >= 0.1;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public static boolean isValidFee(final BigDecimal innum) {
+        try {
+            double num = innum.doubleValue();
+            return (num >= 0.1);
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
