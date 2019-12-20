@@ -186,7 +186,7 @@ public class DemoStatus {
 
     public static IfFeedback checkReceipt(RPCClient client, String hash) {
         IfFeedback fb = new IfFeedback();
-        System.out.println("Check receipt for: " + hash);
+        System.out.println("\nCheck receipt for: " + hash);
 
         for (int i = 0; i < 3; i++) {
             try {

@@ -10,6 +10,7 @@ import org.bitcoin.NativeSecp256k1Util;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Sha256Hash;
 import org.bitcoinj.core.ECKey.ECDSASignature;
+import org.json.JSONObject;
 import org.spongycastle.asn1.ASN1Integer;
 import org.spongycastle.crypto.digests.RIPEMD160Digest;
 

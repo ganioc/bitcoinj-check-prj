@@ -23,10 +23,13 @@ public class App {
         System.out.println("\nCreate client");
         RPCClient client = new RPCClient(info);
 
-        testDemoAddr();
+        // Test address, key creation, address validation
+        // testDemoAddr();
 
-        testDemoStatus(client);
+        // Test
+        // testDemoStatus(client);
 
+        // Test a transferTo transaction, de-serialize provided
         testDemoTransfer(client);
 
         System.out.println("\n-- End --");

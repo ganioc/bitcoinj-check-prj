@@ -121,7 +121,13 @@ public class RPCClient {
     public IfFeedback sendTransaction(RTransaction tx) {
         IfFeedback fb = new IfFeedback();
 
+        tx.print();
+        // data
         byte[] dataBuf = tx.render();
+
+        JSONObject dataObj = RTransaction.parse(dataBuf);
+        System.out.println(dataObj);
+
         JSONObject objArgs = new JSONObject();
         JSONObject objTx = new JSONObject();
         try {

@@ -51,7 +51,7 @@ public class DemoTransfer {
             return fb;
         }
 
-        // nonce = 1;
+        // nonce = 0;
         tx.setMethod("transferTo");
         tx.setNonce(nonce + 1);
         tx.setPublicKey(client.getSecret());
@@ -83,7 +83,7 @@ public class DemoTransfer {
         // check receipt
         fb = DemoStatus.checkReceipt(client, tx.getHash());
         if (fb.ret == 0) {
-            System.out.println("Confirmed: " + tx.getHash());
+            System.out.println("\nConfirmed tx: " + tx.getHash());
         }
         fb.resp = "OK";
 
