@@ -59,12 +59,19 @@ public class RTransaction {
 
     public void print() {
         System.out.println("\nprint:");
+        System.out.println("method");
         System.out.println(this.m_method);
+        System.out.println("nonce");
         System.out.println(this.m_nonce);
+        System.out.println("publickey");
         System.out.println(this.m_publicKey);
+        System.out.println("input");
         System.out.println(Encoding.toStringifiable(this.m_input, true));
+        System.out.println("value");
         System.out.println(this.m_value);
+        System.out.println("fee");
         System.out.println(this.m_fee);
+        System.out.println("signature");
         System.out.println(Digest.bytesToText(this.m_signature));
     }
 

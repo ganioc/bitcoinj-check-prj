@@ -26,8 +26,7 @@ DemoTransfer - DemoTransfer.transferTo()
 
 ```
 
-Q: 交易签名出来的字节流，反序列化成一个json结构，里面有amount、fromaddr这些信息供我们校验。提供js的sdk就行
-如果交易签名出来的结构就是json的，有金额、fromaddr、toaddr这些字段，倒是不需要提供反序列化的sdk
+Q: 交易签名出来的字节流，反序列化成一个json结构
 
 A: 见Digest.parse()可以解析 byte[]为json, 如下所示
 
@@ -55,7 +54,7 @@ A: 见Digest.parse()可以解析 byte[]为json, 如下所示
 ### 2 交易构造
 
 ```
-Q: 构造交易必须要java demo，js的不行
+Q: 构造交易
 
 A: DemoTransfer.java文件
 
@@ -65,7 +64,7 @@ A: DemoTransfer.java文件
 ### 3 地址校验
 
 ```
-Q: 地址校验也得java sdk，js的不行
+Q: 地址校验,生成
 
 A: DemoAddr.java文件
 
